@@ -57,10 +57,10 @@ public class MainActivity extends Activity {
 		// Create an image file name
 		@SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		String imageFileName = "JPEG_" + timeStamp + "_";
-//		File imagesDir = new File(getExternalFilesDir(null), "images");
-		File imagesDir = new File(getFilesDir(), "images");
+		File imagesDir = new File(getExternalFilesDir(null), "images");
+//		File imagesDir = new File(getFilesDir(), "images");
 		if (!imagesDir.exists()) {
-			boolean result = imagesDir.mkdirs();
+			boolean result = imagesDir.mkdir();
 		}
 		mCurrentPhotoFile = new File(imagesDir, imageFileName + ".jpg");
 		return mCurrentPhotoFile;
