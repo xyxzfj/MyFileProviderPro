@@ -16,12 +16,12 @@ import java.util.Date;
 
 public class MainActivity extends Activity {
 
-	private static final int REQUEST_CODE_TAKE_PHOTO = 1;
 	private static final String TAG = "MainActivity";
+
+	private static final int REQUEST_CODE_TAKE_PHOTO = 1;
 
 	File mCurrentPhotoFile;
 	Uri mCurrentPhotoUri;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +45,9 @@ public class MainActivity extends Activity {
 
 			// Continue only if the File was successfully created
 			if (photoFile != null) {
-				mCurrentPhotoUri = FileProvider.getUriForFile(this,
-						"vikivy.me.myfileproviderpro",
-						photoFile);
-				takePictureIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+				mCurrentPhotoUri = FileProvider.getUriForFile(this, "vikivy.me.myfileproviderpro", photoFile);
 				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoUri);
+				takePictureIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION); // grant write permission
 				startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PHOTO);
 			}
 		}
@@ -59,10 +57,10 @@ public class MainActivity extends Activity {
 		// Create an image file name
 		@SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		String imageFileName = "JPEG_" + timeStamp + "_";
-		File imagesDir = new File(getFilesDir(), "images");
 //		File imagesDir = new File(getExternalFilesDir(null), "images");
+		File imagesDir = new File(getFilesDir(), "images");
 		if (!imagesDir.exists()) {
-			imagesDir.mkdirs();
+			boolean result = imagesDir.mkdirs();
 		}
 		mCurrentPhotoFile = new File(imagesDir, imageFileName + ".jpg");
 		return mCurrentPhotoFile;
@@ -71,14 +69,14 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //		super.onActivityResult(requestCode, resultCode, data);
-		Log.d(TAG, "result code: " + resultCode);
-		Log.d(TAG, "file path: " + mCurrentPhotoFile.getAbsolutePath() + ", exists: " + mCurrentPhotoFile.exists() + ", uri: " + mCurrentPhotoUri.toString());
+
+		Log.d(TAG, "requestCode: " + requestCode + "resultCode: " + resultCode);
 
 		if (requestCode == REQUEST_CODE_TAKE_PHOTO) {
 			if (resultCode == RESULT_OK) {
 				Intent viewPictureIntent = new Intent(Intent.ACTION_VIEW);
 				viewPictureIntent.setData(mCurrentPhotoUri);
-				viewPictureIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+				viewPictureIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // grant read permission
 				startActivity(viewPictureIntent);
 			}
 		}
